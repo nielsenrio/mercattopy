@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | MercattoPy{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">Dashboard</h3>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6>Total de Produtos</h6>
+                <h3>{{ total_products }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6>Total de Categorias</h6>
+                <h3>{{ total_categories }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6>Produtos Ativos</h6>
+                <h3>{{ active_products }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6>Produtos Inativos</h6>
+                <h3>{{ inactive_products }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

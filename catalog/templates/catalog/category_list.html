@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Categorias | MercattoPy{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">Categorias</h3>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-white text-center py-0">Categorias | MercattoPy</h6>
+                <a href="{% url 'category_registration' %}">
+                    <i class="fa-solid fa-box me-2"></i>Cadastro de Categorias
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<table class="table table-striped shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description }}</td>
+            <td>
+                {% if category.is_active %}
+                    <span class="badge bg-success">Ativa</span>
+                {% else %}
+                    <span class="badge bg-danger">Inativa</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

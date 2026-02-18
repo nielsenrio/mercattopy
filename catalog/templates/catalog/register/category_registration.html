@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro de Categoria | MercattoPy{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Cadastro de Categoria</h5>
+        </div>
+
+        <div class="card-body">
+            <form action="{% url 'category_registration' %}" method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    {{ form.name.label_tag }}
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="text-danger small">
+                            {{ form.name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="text-danger small">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form.is_active }}
+                    {{ form.is_active.label_tag }}
+                    {% if form.is_active.errors %}
+                        <div class="text-danger small">
+                            {{ form.is_active.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'category_list' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">Enviar</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

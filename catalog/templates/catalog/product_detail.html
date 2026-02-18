@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Produto | MercattoPy{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">Detalhe do Produto</h3>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4>{{ product.name }}</h4>
+
+        <p class="text-muted">
+            Categoria: <strong>{{ product.category.name }}</strong>
+        </p>
+
+        <p>{{ product.description }}</p>
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                Preço: <strong>R$ {{ product.price }}</strong>
+            </li>
+            <li class="list-group-item">
+                Estoque: <strong>{{ product.stock }}</strong>
+            </li>
+            <li class="list-group-item">
+                Status:
+                {% if product.is_active %}
+                    <span class="badge bg-success">Ativo</span>
+                {% else %}
+                    <span class="badge bg-danger">Inativo</span>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}
