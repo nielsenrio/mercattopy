@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Exclusão de Categoria | MercattoPy{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Confirmar Exclusão da Categoria: {{ category.name }}</h5>
+        </div>
+
+        <div class="card-body">
+            <form action="{% url 'category_delete' category.id %}" method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class=
+                                "alert
+                                {% if message.tags == 'error' %}
+                                    alert-danger
+                                {% else %}
+                                    alert-warning
+                                {% endif %}
+                            ">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'category_list' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">
+                            Confirmar Exclusão
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

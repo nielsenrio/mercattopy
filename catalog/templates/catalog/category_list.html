@@ -10,9 +10,32 @@
         <div class="card shadow-sm">
             <div class="card-body text-center">
                 <h6 class="text-white text-center py-0">Categorias | MercattoPy</h6>
-                <a href="{% url 'category_registration' %}">
-                    <i class="fa-solid fa-box me-2"></i>Cadastro de Categorias
+                <a href="{% url 'category_create' %}">
+                    <i class="fa-solid fa-box me-2"></i>Cadastro de Novas Categorias
                 </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body pt-2">
+                <div class="d-flex align-items-center gap-2">
+                    <strong class="mb-0">Avisos:</strong>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert py-1 px-2 mb-0
+                                {% if message.tags == 'success' %}
+                                    alert-success
+                                {% else %}
+                                    alert-warning
+                                {% endif %}">
+                                <small class="mb-0">
+                                    <strong>{{ message }}</strong>
+                                </small>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -25,6 +48,7 @@
             <th>Nome</th>
             <th>Descrição</th>
             <th>Status</th>
+            <th class="text-center">
         </tr>
     </thead>
     <tbody>
@@ -39,6 +63,16 @@
                     <span class="badge bg-danger">Inativa</span>
                 {% endif %}
             </td>
+
+            <td class="text-center">
+                <a href="{% url 'category_update' category.id %}" class="btn btn-sm btn-outline-primary">
+                    Editar
+                </a>
+                <a href="{% url 'category_delete' category.id %}" class="btn btn-sm btn-outline-primary">
+                    Excluir
+                </a>
+            </td>
+
         </tr>
         {% endfor %}
     </tbody>

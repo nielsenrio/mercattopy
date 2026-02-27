@@ -10,9 +10,32 @@
         <div class="card shadow-sm">
             <div class="card-body text-center">
                 <h6 class="text-white text-center py-0">Produtos | MercattoPy</h6>
-                <a href="{% url 'product_registration' %}">
-                    <i class="fa-solid fa-box me-2"></i>Cadastro de Produtos
+                <a href="{% url 'product_create' %}">
+                    <i class="fa-solid fa-box me-2"></i>Cadastro de Novos Produtos
                 </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card shadow-sm">
+            <div class="card-body pt-2">
+                <div class="d-flex align-items-center gap-2">
+                    <strong class="mb-0">Avisos:</strong>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert py-1 px-2 mb-0
+                                {% if message.tags == 'success' %}
+                                    alert-success
+                                {% else %}
+                                    alert-warning
+                                {% endif %}">
+                                <small class="mb-0">
+                                    <strong>{{ message }}</strong>
+                                </small>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -48,6 +71,12 @@
             <td>
                 <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-primary">
                     Ver
+                </a>
+                <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-outline-primary">
+                    Editar
+                </a>
+                <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-primary">
+                    Excluir
                 </a>
             </td>
         </tr>
