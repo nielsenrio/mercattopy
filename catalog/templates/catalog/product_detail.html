@@ -3,6 +3,14 @@
 
 {% block content %}
 
+<div class="d-flex justify-content-end">
+         <div class="text-center">
+            <a href="{% url 'product_list' %}" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+            </a>
+         </div>
+</div>
+
 <h3 class="mb-4">Detalhe do Produto</h3>
 
 <div class="card shadow-sm">
@@ -31,11 +39,6 @@
                 {% endif %}
             </li>
         </ul>
-        <div class="d-flex justify-content-end">
-            <a href="{% url 'product_list' %}" class="btn btn-sm btn-primary">
-                <i class="fa-solid fa-arrow-left me-1"></i>Voltar
-            </a>
-        </div>
     </div>
 </div>
 

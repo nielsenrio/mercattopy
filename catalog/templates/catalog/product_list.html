@@ -3,24 +3,31 @@
 
 {% block content %}
 
+<div class="d-flex justify-content-end">
+         <div class="text-center">
+            <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+            </a>
+         </div>
+</div>
+
 <h3 class="mb-4">Produtos</h3>
 
 <div class="row">
     <div class="col-md-3">
         <div class="card shadow-sm">
             <div class="card-body text-center">
-                <h6 class="text-white text-center py-0">Produtos | MercattoPy</h6>
                 <a href="{% url 'product_create' %}">
                     <i class="fa-solid fa-box me-2"></i>Cadastro de Novos Produtos
                 </a>
             </div>
         </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-body pt-2">
                 <div class="d-flex align-items-center gap-2">
-                    <strong class="mb-0">Avisos:</strong>
+                    <strong class="mb-2">Avisos:</strong>
                     {% if messages %}
                         {% for message in messages %}
                             <div class="alert py-1 px-2 mb-0
@@ -37,6 +44,27 @@
                     {% endif %}
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body p-2">
+                <form method="GET" action="{% url 'product_list' %}">
+                    <div class="input-group">
+                        <input type="text" name="qs" class="form-control" placeholder="Pesquisa de produto..." value="{{ request.GET.qs }}">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            {% if request.GET.qs %}
+                <div class="mb-2">
+                    <a href="{% url 'product_list' %}" class="text-decoration-none">
+                        <i class="fa-sharp fa-solid fa-eraser ms-3 me-2"></i>Limpar
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
