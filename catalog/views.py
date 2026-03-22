@@ -152,6 +152,18 @@ def dashboard(request):
 
 def category_list(request):
     categories = Category.objects.all()
+    query_search = request.GET.get('qs')
+
+    if query_search:
+        categories = categories.filter(
+            name__icontains=query_search
+        )
+
+        if not categories.exists():
+            messages.warning(
+                request,
+                f'Categoria não encontrada!'
+            )
 
     return render(
         request,
@@ -163,6 +175,18 @@ def category_list(request):
 
 def product_list(request):
     products = Product.objects.all()
+    query_search = request.GET.get('qs')
+
+    if query_search:
+        products = products.filter(
+            name__icontains=query_search
+        )
+
+        if not products.exists():
+            messages.warning(
+                request,
+                f'Produto não encontrado!'
+            )
 
     return render(
         request,
