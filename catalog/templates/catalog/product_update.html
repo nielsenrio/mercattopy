@@ -11,6 +11,7 @@
         </div>
 
         <div class="card-body">
+            {% if perms.catalog.change_product %}
             <form action="{% url 'product_update' product.id %}" method="post">
                 {% csrf_token %}
 
@@ -75,6 +76,7 @@
                     </div>
                 </div>
             </form>
+            {% endif %}
         </div>
     </div>
 </div>

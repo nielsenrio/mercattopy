@@ -1,8 +1,77 @@
+import logging
+from django.http import HttpResponseForbidden
+
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect
+
 from catalog.forms import ProductForm, CategoryForm
 from catalog.models import Category, Product
 
+logger = logging.getLogger(__name__)
+
+def home(request):
+    return render(request, 'base.html')
+
+def login_view(request):
+    if request.method == "POST":
+        username = (request.POST.get('username') or '').strip()
+        password = (request.POST.get('password') or '').strip()
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            return render(request, 'auth/login.html', {'error': 'Credenciais inválidas'})
+
+    return render(request, 'auth/login.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+def error_403(request, exception=None):
+    try:
+        if exception:
+            logger.warning(
+                "Erro 403 | Usuário: %s | Path: %s | Detalhes: %s",
+                request.user.username if request.user.is_authenticated else 'Anônimo',
+                request.path,
+                str(exception)
+            )
+
+        return render(request, 'page_403.html', status=403)
+    except Exception:
+        logger.warning(
+            "Falha ao renderizar página 403 | Usuário: %s | Path: %s | Detalhes do erro: %s",
+            request.user.username if request.user.is_authenticated else 'Anônimo',
+            request.path,
+            str(exception)
+        )
+
+        return HttpResponseForbidden("Acesso negado. Você não tem permissão para acessar esta página.")
+
+@login_required()
+def dashboard(request):
+    total_products = Product.objects.count()
+    total_categories = Category.objects.count()
+    active_products = Product.objects.filter(is_active=True).count()
+    inactive_products = Product.objects.filter(is_active=False).count()
+
+    contexto = {
+            'total_products': total_products,
+            'total_categories': total_categories,
+            'active_products': active_products,
+            'inactive_products': inactive_products
+        }
+
+    return render(request, 'dashboard/dashboard.html', contexto)
+
+@login_required
+@permission_required('catalog.add_category', raise_exception=True)
 def category_create(request):
     if request.method == "POST":
         form = CategoryForm(request.POST)
@@ -20,6 +89,8 @@ def category_create(request):
         {'form': form}
     )
 
+@login_required
+@permission_required('catalog.change_category', raise_exception=True)
 def category_update(request, id):
     category = Category.objects.get(id=id)
 
@@ -41,6 +112,8 @@ def category_update(request, id):
         }
     )
 
+@login_required
+@permission_required('catalog.delete_category', raise_exception=True)
 def category_delete(request, id):
     category = Category.objects.get(id=id)
 
@@ -70,7 +143,8 @@ def category_delete(request, id):
         {'category': category}
     )
 
-
+@login_required
+@permission_required('catalog.add_product', raise_exception=True)
 def product_create(request):
     if request.method == "POST":
         form = ProductForm(request.POST)
@@ -88,6 +162,8 @@ def product_create(request):
         {'form': form}
     )
 
+@login_required
+@permission_required('catalog.change_product', raise_exception=True)
 def product_update(request, id):
     product = Product.objects.get(id=id)
 
@@ -109,6 +185,8 @@ def product_update(request, id):
         }
     )
 
+@login_required
+@permission_required('catalog.delete_product', raise_exception=True)
 def product_delete(request, id):
     product = Product.objects.get(id=id)
 
@@ -138,18 +216,7 @@ def product_delete(request, id):
         {'product': product}
     )
 
-def home(request):
-    return render(request, 'base.html')
-
-
-def logout(request):
-    return render(request, 'auth/login.html')
-
-
-def dashboard(request):
-    return render(request, 'dashboard/dashboard.html')
-
-
+@login_required
 def category_list(request):
     categories = Category.objects.all()
     query_search = request.GET.get('qs')
@@ -173,6 +240,7 @@ def category_list(request):
         }
     )
 
+@login_required
 def product_list(request):
     products = Product.objects.all()
     query_search = request.GET.get('qs')
@@ -196,6 +264,7 @@ def product_list(request):
         }
     )
 
+@login_required
 def product_detail(request, id):
     product = Product.objects.get(id=id)
 

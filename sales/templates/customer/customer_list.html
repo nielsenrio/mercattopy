@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Produtos | MercattoPy{% endblock %}
+{% block title %}Vendas | MercattoPy{% endblock %}
 
 {% block content %}
 
@@ -7,26 +7,27 @@
 
 <div class="d-flex justify-content-end">
          <div class="text-center">
-             <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-primary">
+            <a href="{% url 'sales_home' %}" class="btn btn-sm btn-outline-primary">
                 <i class="fa-solid fa-arrow-left me-2"></i>Voltar
-             </a>
+            </a>
          </div>
 </div>
 
-<h3 class="mb-4">Produtos</h3>
+<h3 class="mb-4">Vendas | Cadastro de Clientes</h3>
 
 <div class="row">
     <div class="col-md-3">
         <div class="card shadow-sm">
             <div class="card-body text-center">
-                {% if perms.catalog.add_product %}
-                <a href="{% url 'product_create' %}">
-                    <i class="fa-solid fa-box me-2"></i>Cadastro de Novos Produtos
+                {% if perms.sales.add_customer %}
+                <a href="{% url 'customer_create' %}">
+                    <i class="fa-solid fa-box me-2"></i>Cadastro de Novos Clientes
                 </a>
                 {% endif %}
             </div>
         </div>
     </div>
+
     <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-body pt-2">
@@ -50,13 +51,13 @@
             </div>
         </div>
     </div>
+
     <div class="col-md-3">
-        {% if user.is_authenticated %}
         <div class="card shadow-sm">
             <div class="card-body p-2">
-                <form method="GET" action="{% url 'product_list' %}">
+                <form method="GET" action="{% url 'customer_list' %}">
                     <div class="input-group">
-                        <input type="text" name="qs" class="form-control" placeholder="Pesquisa de produto..." value="{{ request.GET.qs }}">
+                        <input type="text" name="qs" class="form-control" placeholder="Pesquisa de clientes..." value="{{ request.GET.qs }}">
                         <button class="btn btn-primary" type="submit">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </button>
@@ -65,56 +66,56 @@
             </div>
             {% if request.GET.qs %}
                 <div class="mb-2">
-                    <a href="{% url 'product_list' %}" class="text-decoration-none">
-                        <i class="fa-sharp fa-solid fa-eraser ms-3 me-2"></i>Limpar
+                    <a href="{% url 'customer_list' %}" class="text-decoration-none">
+                            <i class="fa-sharp fa-solid fa-eraser ms-3 me-2"></i>Limpar
                     </a>
                 </div>
             {% endif %}
         </div>
-        {% endif %}
     </div>
 </div>
 
 <br>
-<table class="table table-hover shadow-sm">
+<table class="table table-striped shadow-sm">
     <thead class="table-dark">
         <tr>
-            <th>Produto</th>
-            <th>Categoria</th>
-            <th>Preço</th>
-            <th>Estoque</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>CPF/CNPJ</th>
+            <th>Telefone</th>
+            <th>Cidade</th>
             <th>Status</th>
-            <th></th>
+            <th class="text-center">
         </tr>
     </thead>
     <tbody>
-        {% load catalog_formatters %}
-        {% for product in products %}
-            <tr>
-                <td>{{ product.name }}</td>
-                <td>{{ product.category.name }}</td>
-                <td>{{ product.price|real_format }}</td>
-                <td>{{ product.stock }}</td>
-                <td>
-                    {% if product.is_active %}
-                        <span class="badge bg-success">Ativo</span>
-                    {% else %}
-                        <span class="badge bg-danger">Inativo</span>
-                    {% endif %}
-                </td>
-
-                <td>
-                    <a href="{% url 'product_detail' product.id %}" class="btn btn-sm btn-outline-primary">
-                        Ver
-                    </a>
-                    <a href="{% url 'product_update' product.id %}" class="btn btn-sm btn-outline-primary">
-                        Editar
-                    </a>
-                    <a href="{% url 'product_delete' product.id %}" class="btn btn-sm btn-outline-primary">
-                        Excluir
-                    </a>
-                </td>
-            </tr>
+        {% load sales_formatters %}
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.document | document_format }}</td>
+            <td>{{ customer.phone | phone_format }}</td>
+            <td>{{ customer.city }}</td>
+            <td>
+                {% if customer.is_active %}
+                    <span class="badge bg-success">Ativa</span>
+                {% else %}
+                    <span class="badge bg-danger">Inativa</span>
+                {% endif %}
+            </td>
+            <td class="text-center">
+                <a href="{% url 'customer_detail' customer.id %}" class="btn btn-sm btn-outline-primary">
+                    Ver
+                </a>
+                <a href="{% url 'customer_update' customer.id %}" class="btn btn-sm btn-outline-primary">
+                    Editar
+                </a>
+                <a href="{% url 'customer_delete' customer.id %}" class="btn btn-sm btn-outline-primary">
+                    Excluir
+                </a>
+            </td>
+        </tr>
         {% endfor %}
     </tbody>
 </table>

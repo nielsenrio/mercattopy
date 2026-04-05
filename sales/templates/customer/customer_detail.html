@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Vendas | MercattoPy{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-end">
+         <div class="text-center">
+             {% if user.is-authenticated %}
+             <a href="{% url 'customer_list' %}" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+             </a>
+             {% endif %}
+         </div>
+</div>
+
+<h3 class="mb-4">Detalhe do Cliente</h3>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        {% load sales_formatters %}
+
+        <h4>{{ customer.name }}</h4>
+
+        <p><strong> CPF / CNPJ:</strong> {{ customer.document | document_format }}</p>
+        <p> {{ customer.get_type_display }}</p>
+
+
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                Email: <strong> {{ customer.email }}</strong>
+            </li>
+            <li class="list-group-item">
+                Telefone: <strong>{{ customer.phone | phone_format }}</strong>
+            </li>
+            <li class="list-group-item">
+                Cidade: <strong>{{ customer.city }}</strong>
+            </li>
+            <li class="list-group-item">
+                Estado: <strong>{{ customer.state }}</strong>
+            </li>
+            <li class="list-group-item">
+                CEP: <strong>{{ customer.zip_code | zip_code_format }}</strong>
+            </li>
+
+
+            <li class="list-group-item">
+                Status:
+                {% if customer.is_active %}
+                    <span class="badge bg-success">Ativo</span>
+                {% else %}
+                    <span class="badge bg-danger">Inativo</span>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

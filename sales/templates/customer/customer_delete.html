@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Exclusão de Categoria | MercattoPy{% endblock %}
+{% block title %}Exclusão de Cliente | MercattoPy{% endblock %}
 
 {% block content %}
 
 <div class="container mt-4">
     <div class="card shadow-sm">
         <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">Confirmar Exclusão da Produto: {{ product.name }}</h5>
+            <h5 class="mb-0">Confirmar Exclusão da Cliente: {{ customer.name }}</h5>
         </div>
 
         <div class="card-body">
-            {% if perms.catalog.delete_product %}
-            <form action="{% url 'product_delete' product.id %}" method="post">
+            {% if perms.sales.delete_customer %}
+            <form action="{% url 'customer_delete' customer.id %}" method="post">
                 {% csrf_token %}
 
                 <div class="mb-3">
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end gap-2">
-                    <a href="{% url 'product_list' %}" class="btn btn-secondary">
+                    <a href="{% url 'customer_list' %}" class="btn btn-secondary">
                         Cancelar
                     </a>
                     <div class="d-grid gap-2">

@@ -11,6 +11,7 @@
         </div>
 
         <div class="card-body">
+            {% if perms.catalog.delete_category %}
             <form action="{% url 'category_delete' category.id %}" method="post">
                 {% csrf_token %}
 
@@ -42,6 +43,7 @@
                     </div>
                 </div>
             </form>
+            {% endif %}
         </div>
     </div>
 </div>

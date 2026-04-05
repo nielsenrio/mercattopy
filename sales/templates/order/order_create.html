@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro de Clientes | MercattoPy{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Realizar Pedidos</h5>
+        </div>
+
+        <div class="card-body">
+            {% if perms.sales.add_sale %}
+            <form action="{% url 'order_create' %}" method="post">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ sale_form.customer.label_tag }}
+                        {{ sale_form.customer }}
+                        {% if sale_form.customer.errors %}
+                        <div class="text-danger small">
+                            {{ sale_form.customer.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ sale_form.payment_method.label_tag }}
+                        {{ sale_form.payment_method }}
+                        {% if sale_form.payment_method.errors %}
+                        <div class="text-danger small">
+                            {{ sale_form.payment_method.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ item_form.product.label_tag }}
+                        {{ item_form.product }}
+                        {% if item_form.product.errors %}
+                        <div class="text-danger small">
+                            {{ item_form.product.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ item_form.quantity.label_tag }}
+                        {{ item_form.quantity }}
+                        {% if item_form.quantity.errors %}
+                        <div class="text-danger small">
+                            {{ item_form.quantity.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                    {{ sale_form.status_order.label_tag }}
+                    {{ sale_form.status_order }}
+                    {% if sale_form.status_order.errors %}
+                    <div class="text-danger small">
+                        {{ sale_form.status_order.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'order_list' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">
+                            Salvar
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

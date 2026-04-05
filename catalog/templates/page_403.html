@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Acesso não autorizado | MercattoPy{% endblock %}
+
+{% block content %}
+
+
+<section class="py-5 bg-light border-bottom">
+  <div class="container">
+    <div class="row justify-content-center text-center g-4">
+
+      <div class="col-lg-8">
+        <span class="badge bg-danger-subtle text-danger border mb-3">
+          Erro 403
+        </span>
+
+        <h1 class="display-6 fw-bold mb-3">
+          Acesso não autorizado
+        </h1>
+
+        <p class="lead text-muted mb-0">
+          Você tentou acessar uma área para a qual não possui permissão.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center g-4">
+
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm text-center h-100">
+          <div class="card-body p-5">
+
+            <div class="mb-4">
+              <div class="rounded-circle bg-danger bg-opacity-10 d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                <i class="fa-solid fa-lock fa-2x text-danger"></i>
+              </div>
+            </div>
+
+            <h2 class="h4 fw-semibold mb-3">
+              Permissão insuficiente
+            </h2>
+
+            <p class="text-muted mb-4">
+              Esta área pode exigir privilégios administrativos ou permissões específicas.
+              Caso você acredite que deveria ter acesso, entre em contato com o responsável pelo sistema.
+            </p>
+
+            <div class="d-flex justify-content-center gap-2 flex-wrap">
+              <a href="{% url 'base' %}" class="btn btn-primary px-4">
+                <i class="fa-solid fa-house me-1"></i>
+                Voltar para Home
+              </a>
+
+              {% if not user.is_authenticated %}
+              <a href="{% url 'login' %}" class="btn btn-outline-secondary px-4">
+                <i class="fa-solid fa-arrow-right-to-bracket me-1"></i>
+                Fazer login
+              </a>
+              {% endif %}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row g-4 align-items-stretch">
+
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body p-4">
+            <h2 class="h5 fw-bold mb-3">Possíveis causas</h2>
+            <p class="text-muted mb-0">
+              O acesso pode estar bloqueado por regras de permissão, autenticação ou nível de usuário.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="row g-3">
+
+          <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body p-4">
+                <i class="fa-solid fa-user-lock text-danger fs-3 mb-3"></i>
+                <h3 class="h6 fw-semibold">Sem login</h3>
+                <p class="text-muted mb-0">
+                  Você pode não estar autenticado no sistema.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body p-4">
+                <i class="fa-solid fa-shield-halved text-warning fs-3 mb-3"></i>
+                <h3 class="h6 fw-semibold">Permissão insuficiente</h3>
+                <p class="text-muted mb-0">
+                  Seu perfil pode não ter acesso a esta funcionalidade.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100">
+              <div class="card-body p-4">
+                <i class="fa-solid fa-circle-xmark text-secondary fs-3 mb-3"></i>
+                <h3 class="h6 fw-semibold">Restrição de rota</h3>
+                <p class="text-muted mb-0">
+                  A página pode estar protegida por regras internas do sistema.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

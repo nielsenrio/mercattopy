@@ -3,6 +3,7 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
 
 <div class="d-flex justify-content-end">
          <div class="text-center">
@@ -18,9 +19,11 @@
     <div class="col-md-3">
         <div class="card shadow-sm">
             <div class="card-body text-center">
+                {% if perms.catalog.add_category %}
                 <a href="{% url 'category_create' %}">
                     <i class="fa-solid fa-box me-2"></i>Cadastro de Novas Categorias
                 </a>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -108,5 +111,7 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% endif %}
 
 {% endblock %}

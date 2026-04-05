@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Vendas | MercattoPy{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div class="d-flex justify-content-end">
+         <div class="text-center">
+             <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-arrow-left me-2"></i>Voltar
+             </a>
+         </div>
+</div>
+
+<h3 class="mb-4">Vendas </h3>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <a href="{% url 'customer_list' %}">
+                    <i class="fa-solid fa-box me-2"></i>Cadastro de Clientes
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <a href="{% url 'order_list' %}">
+                    <i class="fa-solid fa-box me-2"></i>Realizar Pedidos
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<table class="table table-hover shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Cliente</th>
+            <th>Data</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% load sales_formatters %}
+        {% for sale in sales %}
+            <tr>
+                <td>{{ sale.customer.name }}</td>
+                <td>{{ sale.date|date:"d/m H:i" }}</td>
+                <td>{{ sale.total|real_format }}</td>
+                <td>{{ sale.get_status_order_display  }}</td>
+                <td class="text-center">
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endif %}
+
+{% endblock %}

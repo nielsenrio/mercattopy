@@ -11,6 +11,7 @@
         </div>
 
         <div class="card-body">
+            {% if perms.catalog.add_product %}
             <form action="{% url 'product_create' %}" method="post">
                 {% csrf_token %}
 
@@ -68,6 +69,7 @@
                     <a href="{% url 'product_list' %}" class="btn btn-secondary">
                         Cancelar
                     </a>
+
                     <div class="d-grid gap-2">
                         <button class="btn btn-primary" type="submit">
                             Salvar
@@ -75,6 +77,7 @@
                     </div>
                 </div>
             </form>
+            {% endif %}
         </div>
     </div>
 </div>

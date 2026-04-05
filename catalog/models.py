@@ -28,4 +28,4 @@ class Product(models.Model):
         db_table = 'Product'
 
     def __str__(self):
-        return f'{self.name} - {self.category.name} - {self.price} - {self.stock}'
+        return f'{self.name}'

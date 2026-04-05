@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Atualização de Cliente | MercattoPy{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Atualização da Cliente: {{ customer.name }}</h5>
+        </div>
+
+        <div class="card-body">
+            {% if perms.sales.change_customer %}
+            <form action="{% url 'customer_update' customer.id %}" method="post">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-9 mb-3">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="text-danger small">
+                            {{ form.name.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.type.label_tag }}
+                        {{ form.type }}
+                        {% if form.type.errors %}
+                        <div class="text-danger small">
+                            {{ form.type.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-9 mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="text-danger small">
+                            {{ form.email.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.document.label_tag }}
+                        {{ form.document }}
+                        {% if form.document.errors %}
+                        <div class="text-danger small">
+                            {{ form.document.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <div class="text-danger small">
+                            {{ form.phone.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        {{ form.zip_code.label_tag }}
+                        {{ form.zip_code }}
+                        {% if form.zip_code.errors %}
+                        <div class="text-danger small">
+                            {{ form.zip_code.errors }}
+                        </div>
+                    {% endif %}
+                    </div>
+
+                     <div class="col-md-5 mb-3">
+                        {{ form.city.label_tag }}
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                        <div class="text-danger small">
+                            {{ form.city.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.state.label_tag }}
+                        {{ form.state }}
+                        {% if form.state.errors %}
+                        <div class="text-danger small">
+                            {{ form.state.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form.is_active }}
+                    {{ form.is_active.label_tag }}
+                    {% if form.is_active.errors %}
+                        <div class="text-danger small">
+                            {{ form.is_active.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'customer_list' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">
+                            Atualizar
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

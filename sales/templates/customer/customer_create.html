@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro de Clientes | MercattoPy{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Cadastro de Clientes</h5>
+        </div>
+
+        <div class="card-body">
+            {% if perms.sales.add_customer %}
+            <form action="{% url 'customer_create' %}" method="post">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col-md-9 mb-3">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                        <div class="text-danger small">
+                            {{ form.name.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.type.label_tag }}
+                        {{ form.type }}
+                        {% if form.type.errors %}
+                        <div class="text-danger small">
+                            {{ form.type.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-9 mb-3">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                        <div class="text-danger small">
+                            {{ form.email.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.document.label_tag }}
+                        {{ form.document }}
+                        {% if form.document.errors %}
+                        <div class="text-danger small">
+                            {{ form.document.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                        <div class="text-danger small">
+                            {{ form.phone.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-2 mb-3">
+                        {{ form.zip_code.label_tag }}
+                        {{ form.zip_code }}
+                        {% if form.zip_code.errors %}
+                        <div class="text-danger small">
+                            {{ form.zip_code.errors }}
+                        </div>
+                    {% endif %}
+                    </div>
+
+                     <div class="col-md-5 mb-3">
+                        {{ form.city.label_tag }}
+                        {{ form.city }}
+                        {% if form.city.errors %}
+                        <div class="text-danger small">
+                            {{ form.city.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.state.label_tag }}
+                        {{ form.state }}
+                        {% if form.state.errors %}
+                        <div class="text-danger small">
+                            {{ form.state.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form.is_active }}
+                    {{ form.is_active.label_tag }}
+                    {% if form.is_active.errors %}
+                        <div class="text-danger small">
+                            {{ form.is_active.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="{% url 'customer_list' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">
+                            Salvar
+                        </button>
+                    </div>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+<!-- Script unificado para mascarar os campos de CEP e telefone e consultar o CEP -->
+{% block extra_scripts %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  const docInput = document.getElementById("id_document");
+  const cepInput = document.getElementById("id_zip_code");
+  const telefoneInput = document.getElementById("id_phone");
+  const cidadeInput = document.getElementById("id_city");
+  const estadoInput = document.getElementById("id_state");
+
+  /* -----------------------------
+  MÁSCARAS
+  ----------------------------- */
+
+  if (cepInput) {
+    IMask(cepInput, {
+      mask: "00000-000"
+    });
+  }
+
+  if (telefoneInput) {
+    IMask(telefoneInput, {
+      mask: [
+        { mask: "(00) 0000-0000" },
+        { mask: "(00) 00000-0000" }
+      ]
+    });
+  }
+
+  if (docInput) {
+    IMask(docInput, {
+      mask: [
+        { mask: "000.000.000-00", maxLength: 14},
+        { mask: "00.000.000/0000-00", maxLength: 18}
+      ]
+  });
+}
+
+
+  /* -----------------------------
+  FUNÇÕES AUXILIARES
+  ----------------------------- */
+
+  function limparEndereco() {
+    if (cidadeInput) cidadeInput.value = "";
+    if (estadoInput) estadoInput.value = "";
+  }
+
+  function mostrarLoading() {
+    if (cidadeInput) cidadeInput.value = "Carregando...";
+    if (estadoInput) estadoInput.value = "...";
+  }
+
+
+
+  /* -----------------------------
+  BUSCA CEP
+  ----------------------------- */
+
+  async function buscarCEP(cep) {
+
+    try {
+
+      mostrarLoading();
+
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+
+      if (data.erro) {
+        limparEndereco();
+        return;
+      }
+
+      if (cidadeInput) cidadeInput.value = data.localidade || "";
+      if (estadoInput) estadoInput.value = data.uf || "";
+
+    } catch (error) {
+
+      console.log("Erro ao consultar CEP");
+      limparEndereco();
+
+    }
+
+  }
+
+  /* -----------------------------
+  EVENTO CEP
+  ----------------------------- */
+
+  if (cepInput) {
+
+    cepInput.addEventListener("blur", function() {
+
+      const cep = cepInput.value.replace(/\D/g, "");
+
+      if (cep.length === 8) {
+        buscarCEP(cep);
+      }
+    });
+  }
+});
+</script>
+
+{% endblock %}

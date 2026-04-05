@@ -11,6 +11,7 @@
         </div>
 
         <div class="card-body">
+            {% if perms.catalog.add_category %}
             <form action="{% url 'category_create' %}" method="post">
                 {% csrf_token %}
 
@@ -55,6 +56,7 @@
                     </div>
                 </div>
             </form>
+            {% endif %}
         </div>
     </div>
 </div>
