@@ -4,10 +4,10 @@ from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import render, redirect
-
+from django.shortcuts import render, redirect, get_object_or_404
 from catalog.forms import ProductForm, CategoryForm
 from catalog.models import Category, Product
+from sales.models import SaleItem
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ def category_create(request):
 @login_required
 @permission_required('catalog.change_category', raise_exception=True)
 def category_update(request, id):
-    category = Category.objects.get(id=id)
+    category = get_object_or_404(Category, id=id)
 
     if request.method == "POST":
         form = CategoryForm(request.POST, instance=category)
@@ -115,7 +115,7 @@ def category_update(request, id):
 @login_required
 @permission_required('catalog.delete_category', raise_exception=True)
 def category_delete(request, id):
-    category = Category.objects.get(id=id)
+    category = get_object_or_404(Category, id=id)
 
     if request.method == "POST":
 
@@ -165,7 +165,7 @@ def product_create(request):
 @login_required
 @permission_required('catalog.change_product', raise_exception=True)
 def product_update(request, id):
-    product = Product.objects.get(id=id)
+    product = get_object_or_404(Product, id=id)
 
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
@@ -188,7 +188,7 @@ def product_update(request, id):
 @login_required
 @permission_required('catalog.delete_product', raise_exception=True)
 def product_delete(request, id):
-    product = Product.objects.get(id=id)
+    product = get_object_or_404(Product, id=id)
 
     if request.method == "POST":
 
@@ -196,6 +196,17 @@ def product_delete(request, id):
             messages.error(
                 request,
                 f' Exclusão não realizada! Produto em estoque!'
+            )
+            return render(
+                request,
+                'catalog/product_delete.html',
+                {'product': product}
+            )
+
+        if SaleItem.objects.filter(product=product).exists():
+            messages.error(
+                request,
+                'Exclusão não realizada! Este produto possui vendas vinculadas.'
             )
             return render(
                 request,
@@ -266,7 +277,7 @@ def product_list(request):
 
 @login_required
 def product_detail(request, id):
-    product = Product.objects.get(id=id)
+    product = get_object_or_404(Product, id=id)
 
     return render(
         request,
